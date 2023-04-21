@@ -13,7 +13,12 @@ namespace net_il_mio_fotoalbum.Models
         public string Description { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
         [Required(ErrorMessage = "Inserisci la visibilità.")]
-        public bool IsVisible { get; set; } = true;
+        public bool IsVisible { get; set; }
         public List<Category>? Categories { get; set; }
+
+        public Photo()
+        {
+
+        }
     }
 }

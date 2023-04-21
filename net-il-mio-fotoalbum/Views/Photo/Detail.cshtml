@@ -1,0 +1,11 @@
+﻿@model Photo
+
+@{
+    Layout = "_Layout";
+    var photo = Model;
+}
+
+
+<img src="@photo.ImageUrl" />
+<h1>@photo.Title</h1>
+<p>@photo.Description</p>

@@ -1,0 +1,24 @@
+﻿@model Photo
+
+@{
+    var photo = Model;
+}
+
+<tr>
+    <td>@photo.Id</td>
+    <td class="h-25 w-25">
+        <div class="h-25 w-25">
+            <img class="w-100 img-fluid h-100 " src="@photo.ImageUrl">
+        </div>
+    </td>
+    <td>
+        <a href="@Url.Action("Detail", "Photo", new { Id = photo.Id })">@photo.Title</a>
+    </td>
+    <td>@photo.Description</td>
+    <td>
+        @foreach (var category in photo.Categories!)
+        {
+            <div>@category.Name</div>
+        }
+    </td>
+</tr>

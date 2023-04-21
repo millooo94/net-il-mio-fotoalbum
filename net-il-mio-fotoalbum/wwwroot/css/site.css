@@ -16,3 +16,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#manage {
+    font-size: 12px;
+}
+#logout {
+    width: 100px;
+}

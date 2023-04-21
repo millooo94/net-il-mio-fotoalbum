@@ -1,0 +1,48 @@
+﻿@model PhotoFormModel
+
+@{
+	var photo = Model;
+}
+
+<div class="my-container">
+	<form method="post" asp-controller="Photo" asp-action="Create">
+		@Html.AntiForgeryToken()
+		<div class="mb-3">
+			<label asp-for="Photo.Title" class="form-label fw-bold">Name</label>
+			<input type="text" asp-for="Photo.Title" class="form-control">
+			<div class="error">
+				<span asp-validation-for="Photo.Title" class="text error"></span>
+			</div>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Photo.Description" class="form-label fw-bold">Description</label>
+			<div>
+				<textarea asp-for="Photo.Description" class="w-100"></textarea>
+				<div class="error">
+					<span asp-validation-for="Photo.Description" class="text error"></span>
+				</div>
+			</div>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Photo.ImageUrl" class="form-label fw-bold">Image</label>
+			<input type="text" asp-for="Photo.ImageUrl" class="form-control">
+			<div class="error">
+				<span asp-validation-for="Photo.ImageUrl" class="text error"></span>
+			</div>
+		</div>
+		<div class="mb-3">
+			<label asp-for="SelectedCategories" class="mb-3">Ingredients</label>
+			<select asp-for="SelectedCategories" multiple="multiple" asp-items="@photo.Categories" class="w-100"></select>
+		</div>
+		<div class="form-check">
+			<input asp-for="Photo.IsVisible" type="checkbox" value="true" class="form-check-input" id="flexCheckDefault">
+			<label asp-for="Photo.IsVisible" class="form-check-label">
+				Default checkbox
+			</label>
+			<div class="error">
+				<span asp-validation-for="Photo.IsVisible" class="text error"></span>
+			</div>
+		</div>
+		<button type="submit">Create</button>
+	</form>
+</div>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PhotoContext>(options =>
-    options.UseSqlServer("Data Source=localhost;Initial Catalog=PizzasDb;Integrated Security=True; Encrypt=False"));
+    options.UseSqlServer("Data Source=localhost;Initial Catalog=photosDb;Integrated Security=True; Encrypt=False"));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -23,7 +23,6 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSqlServer<PhotoContext>("Data Source=localhost;Initial Catalog=photosDb;Integrated Security=True; Encrypt=false");
 
 var app = builder.Build();
 
