@@ -21,4 +21,11 @@
             <div>@category.Name</div>
         }
     </td>
+    <td>
+        <a href="@Url.Action("Update", "Photo", new { Id = photo.Id })" class="btn btn-warning">Edit</a>
+        <form asp-action="Delete" asp-controller="Photo" asp-route-id="@photo.Id">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </td>
 </tr>

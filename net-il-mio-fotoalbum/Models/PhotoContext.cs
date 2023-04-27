@@ -11,6 +11,7 @@ namespace net_il_mio_fotoalbum.Models
         public PhotoContext(DbContextOptions<PhotoContext> options) : base(options) { }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         public void Seed()
         {

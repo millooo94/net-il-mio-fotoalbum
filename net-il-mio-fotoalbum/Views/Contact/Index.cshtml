@@ -1,9 +1,9 @@
-﻿@model Category[]
+﻿@model Contact[]
 
 @{
     Layout = "_LayoutAdminPanel";
-    ViewData["Title"] = "Photos";
-    var categories = Model;
+    ViewData["Title"] = "Contacts";
+    var contacts = Model;
 }
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -16,14 +16,14 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Email</th>
+                <th scope="col">Message</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var category in categories)
+            @foreach (var contact in contacts)
             {
-                @await Html.PartialAsync("_TableRowAdminCategory", category)
+                @await Html.PartialAsync("_TableRowAdminContact", contact)
             }
         </tbody>
     </table>

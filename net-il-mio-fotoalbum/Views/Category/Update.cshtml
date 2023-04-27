@@ -1,0 +1,19 @@
+﻿@model CategoryFormModel
+
+@{
+	var category = Model;
+}
+
+<div class="my-container">
+	<form method="post" asp-controller="Category" asp-action="Update">
+		@Html.AntiForgeryToken()
+		<div class="mb-3">
+			<label asp-for="Category.Name" class="form-label fw-bold">Name</label>
+			<input type="text" asp-for="Category.Name" class="form-control">
+			<div class="error">
+				<span asp-validation-for="Category.Name" class="text error"></span>
+			</div>
+		</div>
+		<button type="submit">Update</button>
+	</form>
+</div>

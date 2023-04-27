@@ -1,0 +1,18 @@
+﻿@model Contact
+
+@{
+    var contact = Model;
+}
+
+<tr>
+    <td>@contact.Id</td>
+    <td>
+        <div>@contact.Email</div>
+    </td>
+    <td>
+        <p>@contact.Message</p>
+    </td>
+    <td>
+        <a href="@Url.Action("Detail", "Photo", new { Id = contact.Id })" class="btn btn-warning">Detail</a>
+    </td>
+</tr>

@@ -1,0 +1,10 @@
+﻿@model Contact
+
+@{
+    Layout = "_Layout";
+    var contact = Model;
+}
+
+<h1>Message</h1>
+<div>@contact.Email</div>
+<p>@contact.Message</p>

@@ -23,3 +23,16 @@ body {
 #logout {
     width: 100px;
 }
+
+#no-photos,
+#photos-filter {
+    display: none;
+}
+
+:is(#no-photos, #photos-filter).show {
+    display: block;
+}
+
+#photos-loader.hide {
+    display: none;
+}

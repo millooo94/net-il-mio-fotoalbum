@@ -8,14 +8,37 @@
     @await Html.PartialAsync("_FirstSectionHomePage")
 </section>
 
+<p id="photos-loader">Loading photos...</p>
+
+<p id="no-photos">No photos to display</p>
+
 <div class="album py-5 bg-light">
     <div class="container">
-
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            @for (var i = 0; i < 9; i++)
-            {
-                @await Html.PartialAsync("_CardHomePage")
-            }
-        </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="photos"></div>
     </div>
 </div>
+
+<div class="container">
+    <form id="contact-create-form">
+			<div class="form-field">
+				<label for="email">Email</label>
+				<input id="email" type="email"/>
+				<span id="email-errors" class="text error"></span>
+			</div>
+			<div class="form-field">
+				<label for="message">Message</label>
+				<textarea id="message"></textarea>
+				<span id="message-errors" class="text error"></span>
+			</div>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+@section Scripts
+{
+    <script>
+        loadPhotos();
+        initFilter();
+        initCreateForm();
+    </script>
+}

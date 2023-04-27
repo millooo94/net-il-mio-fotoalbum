@@ -20,12 +20,13 @@
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>
                 <th scope="col">Categories</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var photo in photos)
             {
-                @await Html.PartialAsync("_TableRowAdmin", photo)
+                @await Html.PartialAsync("_TableRowAdminPhoto", photo)
             }
         </tbody>
     </table>
