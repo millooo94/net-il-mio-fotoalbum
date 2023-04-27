@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using net_il_mio_fotoalbum.Migrations;
 using net_il_mio_fotoalbum.Models;
+using System.Security.Claims;
 
 namespace net_il_mio_fotoalbum.Controllers
 {
-    [Authorize]
     public class PhotoController : Controller
     {
         private readonly ILogger<PhotoController> _logger;
@@ -17,20 +18,37 @@ namespace net_il_mio_fotoalbum.Controllers
             _logger = logger;
             _context = context; 
         }
-
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public IActionResult Index()
         {
-            var photos = _context.Photos
-                .Include(p => p.Categories)
-                .ToArray();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isSuperAdmin = User.IsInRole("SuperAdmin");
+            IQueryable<Photo> photosQuery = _context.Photos.Include(p => p.Categories);
+
+            if (!isSuperAdmin)
+            {
+                photosQuery = photosQuery.Where(p => p.UserId == userId);
+            }
+
+            var photos = photosQuery.ToArray();
 
             return View(photos);
+
         }
+
+        [Authorize(Roles = "Admin, SuperAdmin")]
         public IActionResult Detail(int id)
         {
-            var photo = _context.Photos
-                .Include(p => p.Categories)
-                .SingleOrDefault(p => p.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isSuperAdmin = User.IsInRole("SuperAdmin");
+            IQueryable<Photo> photosQuery = _context.Photos.Include(p => p.Categories);
+
+            if (!isSuperAdmin)
+            {
+                photosQuery = photosQuery.Where(p => p.UserId == userId);
+            }
+
+            var photo = photosQuery.SingleOrDefault(p => p.Id == id);
 
             if (photo is null)
             {
@@ -39,6 +57,7 @@ namespace net_il_mio_fotoalbum.Controllers
 
             return View(photo);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             var formModel = new PhotoFormModel()
@@ -48,11 +67,13 @@ namespace net_il_mio_fotoalbum.Controllers
 
             return View(formModel);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(PhotoFormModel form)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (!ModelState.IsValid)
             {
                 form.Categories = _context.Categories.Select(c => new SelectListItem(c.Name, c.Id.ToString())).ToArray();
@@ -62,15 +83,23 @@ namespace net_il_mio_fotoalbum.Controllers
 
             form.Photo.Categories = form.SelectedCategories.Select(sc => _context.Categories.First(c => c.Id == Convert.ToInt32(sc))).ToList();
 
+            form.Photo.UserId = userId;
+
             _context.Photos.Add(form.Photo);
             _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Update(int id)
         {
-            var photo = _context.Photos.Include(p => p.Categories).SingleOrDefault(p => p.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var photo = _context.Photos
+                .Where(p => p.UserId == userId)
+                .Include(p => p.Categories)
+                .SingleOrDefault(p => p.Id == id);
 
             if (photo is null)
             {
@@ -91,11 +120,13 @@ namespace net_il_mio_fotoalbum.Controllers
 
             return View(formModel);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(int id, PhotoFormModel form)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (!ModelState.IsValid)
             {
                 form.Categories = _context.Categories.Select(c => new SelectListItem(c.Name, c.Id.ToString())).ToArray();
@@ -103,7 +134,10 @@ namespace net_il_mio_fotoalbum.Controllers
                 return View(form);
             }
 
-            var savedPhoto = _context.Photos.Include(p => p.Categories).FirstOrDefault(i => i.Id == id);
+            var savedPhoto = _context.Photos
+                                .Where(p => p.UserId == userId)
+                                .Include(p => p.Categories)
+                                .FirstOrDefault(i => i.Id == id);
 
             if (savedPhoto is null)
             {
@@ -121,12 +155,16 @@ namespace net_il_mio_fotoalbum.Controllers
             return RedirectToAction("Index");
 
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            var photoToDelete = _context.Photos.FirstOrDefault(p => p.Id == id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var photoToDelete = _context.Photos
+                                    .Where(p => p.UserId == userId)
+                                    .FirstOrDefault(p => p.Id == id);
 
             if (photoToDelete is null)
             {
@@ -138,6 +176,26 @@ namespace net_il_mio_fotoalbum.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateVisibility(int id, bool isVisible)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var photo = _context.Photos.FirstOrDefault(p => p.Id == id && p.UserId == userId);
+
+            if (photo is null)
+            {
+                return NotFound();
+            }
+
+            photo.IsVisible = isVisible;
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
 
 
     }

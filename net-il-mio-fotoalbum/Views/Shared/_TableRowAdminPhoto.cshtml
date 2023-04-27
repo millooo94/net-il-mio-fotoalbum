@@ -4,6 +4,7 @@
     var photo = Model;
 }
 
+
 <tr>
     <td>@photo.Id</td>
     <td class="h-25 w-25">
@@ -21,11 +22,27 @@
             <div>@category.Name</div>
         }
     </td>
-    <td>
-        <a href="@Url.Action("Update", "Photo", new { Id = photo.Id })" class="btn btn-warning">Edit</a>
-        <form asp-action="Delete" asp-controller="Photo" asp-route-id="@photo.Id">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-    </td>
+    @if (User.IsInRole("Admin"))
+    {
+        <td>
+            <a href="@Url.Action("Update", "Photo", new { Id = photo.Id })" class="btn btn-warning">Edit</a>
+            <form asp-action="Delete" asp-controller="Photo" asp-route-id="@photo.Id">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </td>
+    }
+    @if (User.IsInRole("SuperAdmin"))
+    {
+        <td>
+            <form asp-action="UpdateVisibility" asp-controller="Photo" asp-route-id="@photo.Id">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@photo.Id" />
+                <div class="form-check">
+                    <input type="checkbox" value="true" class="form-check-input" id="flexCheckDefault">
+                </div>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    }
 </tr>

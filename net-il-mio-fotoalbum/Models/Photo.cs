@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace net_il_mio_fotoalbum.Models
@@ -15,6 +16,8 @@ namespace net_il_mio_fotoalbum.Models
         [Required(ErrorMessage = "Inserisci la visibilità.")]
         public bool IsVisible { get; set; }
         public List<Category>? Categories { get; set; }
+        public string? UserId { get; set; }
+        public User? User { get; set; }
 
         public Photo()
         {
